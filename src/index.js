@@ -5,32 +5,26 @@ const views = require("./views");
 const app = express();
 app.use(bodyParser.json());
 
-const viewLogger = views({ windowTimeMs: 15_000 });
+const ONE_MINUTE_MS = 60 * 1000
 
-app.post("/epic", async (req, res) => {
-  const { url } = req.body;
+const viewLogger = views({ windowTimeMs: ONE_MINUTE_MS });
 
-  const numViews = await viewLogger.getViews(url);
+app.get("/views", async (req, res) => {
+  const { test } = req.query;
 
-  if (numViews > 5) {
-    res.json({ epic: "supermode epic" });
+  if (test) {
+    const views = await viewLogger.getViews(test);
+    res.json({ views });
   } else {
-    res.json({ epic: "regular epic" });
+    const views = await viewLogger.getAllViews();
+    res.json({ views });
   }
 });
 
-app.get("/views", async (req, res) => {
-  const { url } = req.query;
-
-  const numViews = await viewLogger.getViews(url);
-
-  res.json({ views: numViews });
-});
-
 app.post("/views", async (req, res) => {
-  const { url } = req.body;
+  const { test } = req.body;
 
-  await viewLogger.logView(url);
+  await viewLogger.logView(test);
 
   res.sendStatus(201);
 });
