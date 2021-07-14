@@ -4,7 +4,8 @@
   "description": "Express server with redis",
   "license": "MIT",
   "scripts": {
-    "start": "node-dev src/index.js"
+    "start": "node-dev src/index.js",
+    "fake-traffic": "node scripts/fakeTraffic.mjs"
   },
   "dependencies": {
     "body-parser": "^1.19.0",
@@ -12,6 +13,7 @@
     "ioredis": "^4.27.6"
   },
   "devDependencies": {
-    "node-dev": "^7.0.0"
+    "node-dev": "^7.0.0",
+    "node-fetch": "^2.6.1"
   }
 }
