@@ -1,8 +1,10 @@
 const express = require("express");
+const cors = require("cors");
 const bodyParser = require("body-parser");
 const views = require("./views");
 
 const app = express();
+app.use(cors());
 app.use(bodyParser.json());
 
 const ONE_MINUTE_MS = 60 * 1000
@@ -10,15 +12,9 @@ const ONE_MINUTE_MS = 60 * 1000
 const viewLogger = views({ windowTimeMs: ONE_MINUTE_MS });
 
 app.get("/views", async (req, res) => {
-  const { test } = req.query;
+  const views = await viewLogger.getAllViews();
 
-  if (test) {
-    const views = await viewLogger.getViews(test);
-    res.json({ views });
-  } else {
-    const views = await viewLogger.getAllViews();
-    res.json({ views });
-  }
+  res.json({ views });
 });
 
 app.post("/views", async (req, res) => {
